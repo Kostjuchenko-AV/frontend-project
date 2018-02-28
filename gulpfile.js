@@ -11,7 +11,8 @@ imagemin = require('gulp-imagemin'),
 pngquant = require('imagemin-pngquant'),
 del = require('del'),
 inject = require('gulp-inject'),
-concatCss = require('gulp-concat-css');
+concatCss = require('gulp-concat-css'),
+gcmq = require('gulp-group-css-media-queries');
 
 var paths = {
 	src: 'src',
@@ -102,6 +103,7 @@ gulp.task('default', function () {
  		browsers: ['last 2 versions'],
  		cascade: false
  	}))
+ 	.pipe(gcmq())
  	.pipe(gulp.dest(paths.tmp + '/css'))
  	.pipe(browserSync.reload({stream: true}));
  });
