@@ -12,6 +12,7 @@ pngquant = require('imagemin-pngquant'),
 del = require('del'),
 inject = require('gulp-inject'),
 concatCss = require('gulp-concat-css'),
+wait = require('gulp-wait'),
 gcmq = require('gulp-group-css-media-queries');
 
 var paths = {
@@ -98,6 +99,7 @@ gulp.task('default', function () {
 
  gulp.task('compileSCSS', function(){ 
  	return gulp.src(paths.srcSCSS)
+ 	.pipe(wait(1000))
  	.pipe(sass())
  	.pipe(autoprefixer({
  		browsers: ['last 2 versions'],
