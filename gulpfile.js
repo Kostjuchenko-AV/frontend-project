@@ -3,6 +3,7 @@ gulp = require('gulp'),
 sass = require('gulp-sass'),
 browserSync = require('browser-sync'),
 autoprefixer = require('gulp-autoprefixer'),
+fileinclude = require('gulp-file-include'),
 concat = require('gulp-concat'),
 cssnano = require('gulp-cssnano'),
 rename = require('gulp-rename'),
@@ -17,6 +18,7 @@ gcmq = require('gulp-group-css-media-queries');
 
 var paths = {
 	src: 'src',
+	srcIncludes: 'src/html/*.html',
 	srcHTML: 'src/*.html',
 	srcCSS: 'src/css/**/*.css',
 	srcSCSS: 'src/scss/**/*.scss',	
@@ -52,6 +54,7 @@ gulp.task('default', function () {
  	gulp.watch(paths.srcSCSS, ['compileSCSS']);
  	gulp.watch(paths.srcJS, ['concatJS']);
  	gulp.watch(paths.srcHTML, ['injectHTML']);
+ 	gulp.watch(paths.srcIncludes, ['injectHTML']);
  });
 
  gulp.task('clean', function() {
@@ -79,7 +82,13 @@ gulp.task('default', function () {
  gulp.task('copy', ['copyHTML', 'copyCSS', 'compileSCSS', 'concatJS','compressImg','copyFonts']);
 
  gulp.task('copyHTML', function () {
- 	return gulp.src(paths.srcHTML).pipe(gulp.dest(paths.tmp));
+ 	return gulp.src(paths.srcHTML)
+ 	.pipe(fileinclude({
+ 		prefix: '@@',
+ 		basepath: '@file'
+ 	}))
+ 	.pipe(gulp.dest(paths.tmp))
+ 	.pipe(gulp.dest(paths.tmp));
  });
 
  gulp.task('injectHTML', ['copyHTML'], function () {
@@ -88,7 +97,6 @@ gulp.task('default', function () {
  	return gulp.src(paths.tmpHTML)
  	.pipe(inject(css, { relative:true } ))
  	.pipe(inject(js, { relative:true } ))
- 	.pipe(gulp.dest(paths.tmp))
  	.pipe(browserSync.reload({stream: true}));
  });
 
