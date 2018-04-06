@@ -3,7 +3,6 @@ gulp = require('gulp'),
 sass = require('gulp-sass'),
 browserSync = require('browser-sync'),
 autoprefixer = require('gulp-autoprefixer'),
-fileinclude = require('gulp-file-include'),
 concat = require('gulp-concat'),
 cssnano = require('gulp-cssnano'),
 rename = require('gulp-rename'),
@@ -14,13 +13,14 @@ del = require('del'),
 inject = require('gulp-inject'),
 concatCss = require('gulp-concat-css'),
 wait = require('gulp-wait'),
-gcmq = require('gulp-group-css-media-queries');
+gcmq = require('gulp-group-css-media-queries'),
+fileinclude = require('gulp-file-include');
 
 var paths = {
 	src: 'src',
-	srcIncludes: 'src/html/*.html',
 	srcHTML: 'src/*.html',
 	srcCSS: 'src/css/**/*.css',
+	srcIncludes: 'src/html/*.html',
 	srcSCSS: 'src/scss/**/*.scss',	
 	srcJS: 'src/js/**/*.js',
 	srcVendorJS: 'src/js/vendor/**/*.js',
@@ -87,7 +87,6 @@ gulp.task('default', function () {
  		prefix: '@@',
  		basepath: '@file'
  	}))
- 	.pipe(gulp.dest(paths.tmp))
  	.pipe(gulp.dest(paths.tmp));
  });
 
@@ -97,6 +96,7 @@ gulp.task('default', function () {
  	return gulp.src(paths.tmpHTML)
  	.pipe(inject(css, { relative:true } ))
  	.pipe(inject(js, { relative:true } ))
+ 	.pipe(gulp.dest(paths.tmp))
  	.pipe(browserSync.reload({stream: true}));
  });
 
