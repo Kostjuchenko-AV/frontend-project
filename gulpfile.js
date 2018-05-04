@@ -240,7 +240,12 @@ gulp.task('default', function () {
  gulp.task('minJS:dist', ['minVendorJS:dist', 'minAppJS:dist']);
 
  gulp.task('copyHTML:dist', function () {
- 	return gulp.src(paths.srcHTML).pipe(gulp.dest(paths.dist));
+ 	return gulp.src(paths.srcHTML)
+ 	.pipe(fileinclude({
+ 		prefix: '@@',
+ 		basepath: '@file'
+ 	}))
+ 	.pipe(gulp.dest(paths.dist));
  });
 
  gulp.task('copy:dist', ['copyHTML:dist', 'minCSS:dist', 'minJS:dist','compressImg:dist','copyFonts:dist']);
